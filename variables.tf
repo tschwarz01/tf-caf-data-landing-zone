@@ -20,7 +20,7 @@ variable "tags" {
   type        = map(string)
   description = "Tags that should be applied to all deployed resources"
   default = {
-    deployedBy = "terraform/azure/caf-enterprise-scale/v1.0.0"
+    deployedBy = ""
     Owner      = ""
     Project    = ""
     #Environment = locals.environment
