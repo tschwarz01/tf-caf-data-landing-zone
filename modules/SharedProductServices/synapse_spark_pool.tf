@@ -1,5 +1,5 @@
 resource "azurerm_synapse_spark_pool" "synapseSparkPool001" {
-  name                 = "SynapseSparkPool001"
+  name                 = "SparkPool001"
   synapse_workspace_id = azurerm_synapse_workspace.synapseProduct001.id
   node_size_family     = "MemoryOptimized"
   node_size            = "Small"
