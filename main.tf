@@ -1,5 +1,4 @@
 
-
 # Configure the Azure provider
 terraform {
   required_providers {
@@ -66,7 +65,7 @@ resource "azurerm_resource_group" "rg_logging" {
 }
 
 module "loggingServices" {
-  source                   = "./modules/logging"
+  source                   = "./modules/LoggingServices"
   location                 = var.location
   environment              = var.environment
   prefix                   = var.prefix
@@ -83,7 +82,7 @@ resource "azurerm_resource_group" "rg_runtimes" {
 }
 
 module "runtimeServices" {
-  source                              = "./modules/runtimes"
+  source                              = "./modules/IntegrationRuntimeServices"
   rgName                              = azurerm_resource_group.rg_runtimes.name
   location                            = var.location
   prefix                              = var.prefix
@@ -106,7 +105,7 @@ resource "azurerm_resource_group" "rg_storage" {
 }
 
 module "storageServices" {
-  source               = "./modules/storage"
+  source               = "./modules/StorageServices"
   rgName               = azurerm_resource_group.rg_storage.name
   location             = var.location
   prefix               = var.prefix
@@ -124,7 +123,7 @@ resource "azurerm_resource_group" "rg_storage-external" {
 }
 
 module "externalStorageServices" {
-  source               = "./modules/ExternalStorage"
+  source               = "./modules/ExternalStorageServices"
   location             = var.location
   rgName               = azurerm_resource_group.rg_storage-external.name
   prefix               = var.prefix
@@ -132,7 +131,6 @@ module "externalStorageServices" {
   svcSubnetId          = module.networkServices.network-output.servicesSubnetId
   privateDnsZoneIdBlob = var.privateDnsZoneIdBlob
 }
-
 
 resource "azurerm_resource_group" "rg_metadata" {
   name     = "rg-${local.name}-metadata"
@@ -211,8 +209,8 @@ module "sharedProductServices" {
   synapseProduct001DefaultStorageAccountFileSystemId = module.storageServices.storageWorkspaceFileSystemId
   synapseSqlAdminGroupName                           = var.sqlserverAdminGroupName
   synapseSqlAdminGroupObjectID                       = var.sqlserverAdminGroupObjectID
-  sqlAdminPassword = var.sqlAdminPassword
-  sqlAdminUserName = var.sqlAdminUserName
+  sqlAdminPassword                                   = var.sqlAdminPassword
+  sqlAdminUserName                                   = var.sqlAdminUserName
   synapseProduct001ComputeSubnetId                   = ""
   privateDnsZoneIdSynapseDev                         = var.privateDnsZoneIdSynapseDev
   privateDnsZoneIdSynapseSql                         = var.privateDnsZoneIdSynapseSql
