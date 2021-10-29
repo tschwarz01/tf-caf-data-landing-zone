@@ -16,6 +16,10 @@ resource "azurerm_synapse_workspace" "synapseProduct001" {
   tags = var.tags
 }
 
+
+
+
+
 resource "azurerm_private_endpoint" "synapsePrivateEndpointSql" {
   name                = "${var.prefix}-synapse001-sql-private-endpoint"
   location            = var.location
