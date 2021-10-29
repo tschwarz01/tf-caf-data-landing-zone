@@ -1,0 +1,41 @@
+prefix                                          = "datalz"
+location                                        = "southcentralus"
+environment                                     = "dev"
+vnetAddressPrefix                               = "10.1.0.0/16"
+servicesSubnetAddressPrefix                     = "10.1.0.0/24"
+databricksIntegrationPublicSubnetAddressPrefix  = "10.1.1.0/24"
+databricksIntegrationPrivateSubnetAddressPrefix = "10.1.2.0/24"
+databricksProductPublicSubnetAddressPrefix      = "10.1.3.0/24"
+databricksProductPrivateSubnetAddressPrefix     = "10.1.4.0/24"
+powerBiGatewaySubnetAddressPrefix               = "10.1.5.0/24"
+dataIntegration001SubnetAddressPrefix           = "10.1.6.0/24"
+dataIntegration002SubnetAddressPrefix           = "10.1.7.0/24"
+dataProduct001SubnetAddressPrefix               = "10.1.8.0/24"
+dataProduct002SubnetAddressPrefix               = "10.1.9.0/24"
+dataManagementZoneVnetId                        = ""
+firewallPrivateIp                               = ""
+dnsServerAdresses                               = [""]
+vmAdminUserName                                 = ""
+vmAdminPassword                                 = ""
+sqlserverAdminGroupName                         = ""
+sqlAdminUserName                                = ""
+sqlAdminPassword                                = ""
+sqlserverAdminGroupObjectID                     = ""
+mysqlserverAdminGroupName                       = ""
+mysqlserverAdminGroupObjectID                   = ""
+
+
+privateDnsZoneIdKeyVault          = ""
+privateDnsZoneIdDataFactory       = ""
+privateDnsZoneIdDataFactoryPortal = ""
+privateDnsZoneIdDfs               = ""
+privateDnsZoneIdBlob              = ""
+privateDnsZoneIdSqlServer         = ""
+privateDnsZoneIdMySqlServer       = ""
+privateDnsZoneIdEventhubNamespace = ""
+privateDnsZoneIdSynapseDev        = ""
+privateDnsZoneIdSynapseSql        = ""
+
+//optional
+deploySelfHostedIntegrationRuntimes = true
+datafactoryIds                      = [""]
