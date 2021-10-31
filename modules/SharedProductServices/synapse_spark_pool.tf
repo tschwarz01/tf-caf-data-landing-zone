@@ -13,7 +13,8 @@ resource "azurerm_synapse_spark_pool" "synapseSparkPool001" {
     delay_in_minutes = 15
   }
 
-  tags = {
-    ENV = "Production"
-  }
+  tags = var.tags
+  depends_on = [
+    azurerm_synapse_workspace.synapseProduct001
+  ]
 }
