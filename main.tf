@@ -215,3 +215,64 @@ module "sharedProductServices" {
   privateDnsZoneIdSynapseDev                         = var.privateDnsZoneIdSynapseDev
   privateDnsZoneIdSynapseSql                         = var.privateDnsZoneIdSynapseSql
 }
+
+// The following resource groups are pre-deployed with this base landing zone template
+// They are intended to be used by the supplemental templates which are
+// available for "Data Product Analytics", "Data Product Batch" and
+// "Data Product Streaming" workloads
+
+resource "azurerm_resource_group" "rg_data_integration001" {
+  name     = "rg-${local.name}-data-int001"
+  location = var.location
+  tags     = var.tags
+}
+
+resource "azurerm_resource_group" "rg_data_integration002" {
+  name     = "rg-${local.name}-data-int002"
+  location = var.location
+  tags     = var.tags
+}
+
+resource "azurerm_resource_group" "rg_data_product001" {
+  name     = "rg-${local.name}-data-product001"
+  location = var.location
+  tags     = var.tags
+}
+
+resource "azurerm_resource_group" "rg_data_product001" {
+  name     = "rg-${local.name}-data-product002"
+  location = var.location
+  tags     = var.tags
+}
+
+/*
+// Data integration resources 001
+resource dataIntegration001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-di001'
+  location: location
+  tags: tagsJoined
+  properties: {}
+}
+
+resource dataIntegration002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-di002'
+  location: location
+  tags: tagsJoined
+  properties: {}
+}
+
+// Data product resources 001
+resource dataProduct001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-dp001'
+  location: location
+  tags: tagsJoined
+  properties: {}
+}
+
+resource dataProduct002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-dp002'
+  location: location
+  tags: tagsJoined
+  properties: {}
+}
+*/
