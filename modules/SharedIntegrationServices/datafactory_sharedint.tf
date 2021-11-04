@@ -13,13 +13,13 @@ resource "azurerm_data_factory" "dataFactoryInt001" {
 
 
 resource "azurerm_private_endpoint" "data_factory_int001_private_endpoint" {
-  name                = "${var.prefix}-${azurerm_data_factory.dataFactoryInt001.name}-adf-private-endpoint"
+  name                = "${var.name}-${azurerm_data_factory.dataFactoryInt001.name}-adf-private-endpoint"
   location            = var.location
   resource_group_name = var.rgName
   subnet_id           = var.svcSubnetId
 
   private_service_connection {
-    name                           = "${var.prefix}-${azurerm_data_factory.dataFactoryInt001.name}-adf-private-endpoint-connection"
+    name                           = "${var.name}-${azurerm_data_factory.dataFactoryInt001.name}-adf-private-endpoint-connection"
     private_connection_resource_id = azurerm_data_factory.dataFactoryInt001.id
     subresource_names              = ["dataFactory"]
     is_manual_connection           = false
@@ -35,13 +35,13 @@ resource "azurerm_private_endpoint" "data_factory_int001_private_endpoint" {
 }
 
 resource "azurerm_private_endpoint" "data_factory_int001_portal_private_endpoint" {
-  name                = "${var.prefix}-${azurerm_data_factory.dataFactoryInt001.name}-adf-portal-private-endpoint"
+  name                = "${var.name}-${azurerm_data_factory.dataFactoryInt001.name}-adf-portal-private-endpoint"
   location            = var.location
   resource_group_name = var.rgName
   subnet_id           = var.svcSubnetId
 
   private_service_connection {
-    name                           = "${var.prefix}-${azurerm_data_factory.dataFactoryInt001.name}-adf-portal-private-endpoint-connection"
+    name                           = "${var.name}-${azurerm_data_factory.dataFactoryInt001.name}-adf-portal-pe-conn"
     private_connection_resource_id = azurerm_data_factory.dataFactoryInt001.id
     subresource_names              = ["portal"]
     is_manual_connection           = false
@@ -56,8 +56,35 @@ resource "azurerm_private_endpoint" "data_factory_int001_portal_private_endpoint
   ]
 }
 
+resource "azurerm_role_assignment" "datafactory001StorageRawRoleAssignment" {
+  scope                = var.storageRawId
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_data_factory.dataFactoryInt001.identity[0].principal_id
+  depends_on = [
+    azurerm_data_factory.dataFactoryInt001
+  ]
+}
+
+resource "azurerm_role_assignment" "datafactory001StorageEnrichedCuratedRoleAssignment" {
+  scope                = var.storageEnrichedCuratedId
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_data_factory.dataFactoryInt001.identity[0].principal_id
+  depends_on = [
+    azurerm_data_factory.dataFactoryInt001
+  ]
+}
+
+resource "azurerm_role_assignment" "datafactory001DatabricksRoleAssignment" {
+  scope                = azurerm_databricks_workspace.databricksIntegration001.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_data_factory.dataFactoryInt001.identity[0].principal_id
+  depends_on = [
+    azurerm_data_factory.dataFactoryInt001
+  ]
+}
+
 resource "azurerm_data_factory_integration_runtime_azure" "datafactoryInt001ManagedIntegrationRuntime" {
-  name                = "${var.prefix}-adf-managedIR-${azurerm_data_factory.dataFactoryInt001.name}"
+  name                = "${var.name}-adf-managedIR-${azurerm_data_factory.dataFactoryInt001.name}"
   data_factory_name   = azurerm_data_factory.dataFactoryInt001.name
   resource_group_name = var.rgName
   location            = var.location
@@ -67,21 +94,21 @@ resource "azurerm_data_factory_integration_runtime_azure" "datafactoryInt001Mana
 }
 
 resource "azurerm_data_factory_managed_private_endpoint" "datafactoryKeyVault001ManagedPrivateEndpoint" {
-  name               = "${local.keyVault001Name}MPE"
+  name               = "KeyVault001MPE"
   data_factory_id    = azurerm_data_factory.dataFactoryInt001.id
   target_resource_id = var.keyVault001Id
   subresource_name   = "vault"
 }
 
 resource "azurerm_data_factory_linked_service_key_vault" "datafactoryKeyVault001LinkedService" {
-  name                     = "${local.keyVault001Name}LS"
+  name                     = "KeyVault001LS"
   resource_group_name      = var.rgName
   data_factory_name        = azurerm_data_factory.dataFactoryInt001.name
   key_vault_id             = var.keyVault001Id
   integration_runtime_name = azurerm_data_factory_integration_runtime_azure.datafactoryInt001ManagedIntegrationRuntime.name
   description              = "Key Vault for storing secrets"
   additional_properties = {
-    baseUrl = "https://${local.keyVault001Name}.vault.azure.net/"
+    baseUrl = "https://${var.keyVault001Name}.vault.azure.net/"
   }
   depends_on = [
     azurerm_data_factory_managed_private_endpoint.datafactoryKeyVault001ManagedPrivateEndpoint
@@ -89,7 +116,7 @@ resource "azurerm_data_factory_linked_service_key_vault" "datafactoryKeyVault001
 }
 
 resource "azurerm_data_factory_managed_private_endpoint" "datafactorySqlServer001ManagedPrivateEndpoint" {
-  name               = "${local.sqlServer001Name}MPE"
+  name               = "sqlServer001MPE"
   data_factory_id    = azurerm_data_factory.dataFactoryInt001.id
   target_resource_id = var.sqlServer001Id
   subresource_name   = "sqlServer"
@@ -99,20 +126,21 @@ resource "azurerm_data_factory_managed_private_endpoint" "datafactorySqlServer00
 }
 
 resource "azurerm_data_factory_linked_service_sql_server" "datafactorySqlserver001LinkedService" {
-  name                     = "${local.sqlServer001Name}_${var.sqlDatabase001Name}"
+  name                     = "sqlServer001_${var.sqlDatabase001Name}"
   resource_group_name      = var.rgName
   data_factory_name        = azurerm_data_factory.dataFactoryInt001.name
   integration_runtime_name = azurerm_data_factory_integration_runtime_azure.datafactoryInt001ManagedIntegrationRuntime.name
   description              = "Sql Database for storing metadata"
-  connection_string        = "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=${local.sqlServer001Name}.database.windows.net;Initial Catalog=${var.sqlDatabase001Name}"
+  connection_string        = "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=${var.sqlServer001Name}.database.windows.net;Initial Catalog=${var.sqlDatabase001Name}"
   depends_on = [
     azurerm_data_factory_managed_private_endpoint.datafactorySqlServer001ManagedPrivateEndpoint,
     azurerm_data_factory.dataFactoryInt001
   ]
 }
 
-resource "azurerm_data_factory_managed_private_endpoint" "datafactoryStorageRawManagedPrivateEndpoint" {
-  name               = "${local.storageRawName}MPE"
+/*
+resource "azurerm_data_factory_managed_private_endpoint" "datafactoryStorageRawBlobManagedPrivateEndpoint" {
+  name               = "storage001MPE"
   data_factory_id    = azurerm_data_factory.dataFactoryInt001.id
   target_resource_id = var.storageRawId
   subresource_name   = "blob"
@@ -120,37 +148,76 @@ resource "azurerm_data_factory_managed_private_endpoint" "datafactoryStorageRawM
     azurerm_data_factory.dataFactoryInt001
   ]
 }
+*/
 
-resource "azurerm_data_factory_linked_service_azure_blob_storage" "datafactoryStorageRawLinkedService" {
-  name                = "${local.storageRawName}_LS"
-  resource_group_name = var.rgName
-  data_factory_name   = azurerm_data_factory.dataFactoryInt001.name
-  connection_string   = "https://${local.storageRawName}.blob.core.windows.net"
-  depends_on = [
-    azurerm_data_factory_managed_private_endpoint.datafactoryStorageRawManagedPrivateEndpoint
-  ]
-}
-
-
-resource "azurerm_data_factory_managed_private_endpoint" "datafactoryStorageEnrichedCuratedManagedPrivateEndpoint" {
-  name               = "${local.storageEnrichedCuratedName}MPE"
+resource "azurerm_data_factory_managed_private_endpoint" "datafactoryStorageRawDfsManagedPrivateEndpoint" {
+  name               = "${var.storageRawName}DFS_MPE"
   data_factory_id    = azurerm_data_factory.dataFactoryInt001.id
-  target_resource_id = var.storageEnrichedCuratedId
-  subresource_name   = "blob"
+  target_resource_id = var.storageRawId
+  subresource_name   = "dfs"
   depends_on = [
     azurerm_data_factory.dataFactoryInt001
   ]
 }
 
-resource "azurerm_data_factory_linked_service_azure_blob_storage" "datafactoryStorageEnrichedCuratedLinkedService" {
-  name                = "${local.storageEnrichedCuratedName}_LS"
-  resource_group_name = var.rgName
-  data_factory_name   = azurerm_data_factory.dataFactoryInt001.name
-  connection_string   = "https://${local.storageEnrichedCuratedName}.blob.core.windows.net"
+resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "datafactoryStorageRawDfsLinkedService" {
+  name                 = "${var.storageRawName}DFS_LS"
+  resource_group_name  = var.rgName
+  data_factory_name    = azurerm_data_factory.dataFactoryInt001.name
+  use_managed_identity = true
+  url                  = "https://${var.storageRawName}.dfs.core.windows.net"
   depends_on = [
-    azurerm_data_factory_managed_private_endpoint.datafactoryStorageEnrichedCuratedManagedPrivateEndpoint
+    azurerm_data_factory.dataFactoryInt001,
+    azurerm_data_factory_managed_private_endpoint.datafactoryStorageRawDfsManagedPrivateEndpoint,
+    azurerm_role_assignment.datafactory001StorageRawRoleAssignment
   ]
 }
+/*
+resource "azurerm_data_factory_linked_service_azure_blob_storage" "datafactoryStorageRawLinkedService" {
+  name                = "storage001BlobLS"
+  resource_group_name = var.rgName
+  data_factory_name   = azurerm_data_factory.dataFactoryInt001.name
+  connection_string   = "https://${var.storageRawName}.blob.core.windows.net"
+  depends_on = [
+    azurerm_data_factory_managed_private_endpoint.datafactoryStorageRawBlobManagedPrivateEndpoint
+  ]
+}
+*/
+
+resource "azurerm_data_factory_managed_private_endpoint" "datafactoryStorageDFSEnrichedCuratedManagedPrivateEndpoint" {
+  name               = "${var.storageEnrichedCuratedName}DFS_MPE"
+  data_factory_id    = azurerm_data_factory.dataFactoryInt001.id
+  target_resource_id = var.storageEnrichedCuratedId
+  subresource_name   = "dfs"
+  depends_on = [
+    azurerm_data_factory.dataFactoryInt001
+  ]
+}
+
+resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "datafactoryStorageDFSEnrichedCuratedLinkedService" {
+  name                 = "${var.storageEnrichedCuratedName}DFS_LS"
+  resource_group_name  = var.rgName
+  data_factory_name    = azurerm_data_factory.dataFactoryInt001.name
+  use_managed_identity = true
+  url                  = "https://${var.storageEnrichedCuratedName}.dfs.core.windows.net"
+  depends_on = [
+    azurerm_data_factory.dataFactoryInt001,
+    azurerm_data_factory_managed_private_endpoint.datafactoryStorageDFSEnrichedCuratedManagedPrivateEndpoint,
+    azurerm_role_assignment.datafactory001StorageEnrichedCuratedRoleAssignment
+  ]
+}
+
+/*
+resource "azurerm_data_factory_linked_service_azure_blob_storage" "datafactoryStorageEnrichedCuratedLinkedService" {
+  name                = "${var.storageEnrichedCuratedName}_LS"
+  resource_group_name = var.rgName
+  data_factory_name   = azurerm_data_factory.dataFactoryInt001.name
+  connection_string   = "https://${var.storageEnrichedCuratedName}.blob.core.windows.net"
+  depends_on = [
+    azurerm_data_factory_managed_private_endpoint.datafactoryStorageDFSEnrichedCuratedManagedPrivateEndpoint
+  ]
+}
+*/
 
 resource "azurerm_data_factory_linked_service_azure_databricks" "datafactoryDatabricksLinkedService" {
   name                = "${local.databricks001Name}_LS"

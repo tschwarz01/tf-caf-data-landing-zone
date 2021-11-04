@@ -1,6 +1,6 @@
 resource "azurerm_mysql_server" "mysqlServerMetadata" {
   name                = local.mySqlServer001Name
-  location            = var.location
+  location            = "westus2"
   resource_group_name = var.rgName
 
   administrator_login          = var.sqlAdminUserName
@@ -23,7 +23,7 @@ resource "azurerm_mysql_active_directory_administrator" "mysqlServerADConfig" {
   server_name         = azurerm_mysql_server.mysqlServerMetadata.name
   resource_group_name = var.rgName
   login               = var.mysqlserverAdminGroupName
-  tenant_id           = data.azurerm_client_config.current.tenant_id
+  tenant_id           = var.tenant_id
   object_id           = var.mysqlserverAdminGroupObjectID
 }
 
@@ -43,13 +43,13 @@ resource "azurerm_mysql_database" "mysqlServerHiveMetastoreDb" {
 }
 
 resource "azurerm_private_endpoint" "mysqlMetadataPrivateEndpoint" {
-  name                = "${var.prefix}-HiveMetastoreDb-sql-private-endpoint"
+  name                = "${var.name}-HiveMetastoreDb-sql-private-endpoint"
   location            = var.location
   resource_group_name = var.rgName
   subnet_id           = var.svcSubnetId
 
   private_service_connection {
-    name                           = "${var.prefix}-HiveMetastoreDb-sql-private-endpoint-connection"
+    name                           = "${var.name}-HiveMetastoreDb-sql-private-endpoint-connection"
     private_connection_resource_id = azurerm_mysql_server.mysqlServerMetadata.id
     subresource_names              = ["mysqlServer"]
     is_manual_connection           = false
@@ -61,20 +61,22 @@ resource "azurerm_private_endpoint" "mysqlMetadataPrivateEndpoint" {
   }
 }
 
+/*
 resource "azurerm_key_vault_secret" "mysqlserver001UsernameSecretDeployment" {
-  name         = "${local.keyVault002Name}/${local.mySqlServer001Name}Username"
+  name         = "${local.keyVault002Name}-${local.mySqlServer001Name}Username"
   value        = var.sqlAdminUserName
-  key_vault_id = azurerm_key_vault.keyVaultMetadata["datalz-vault002"].id
+  key_vault_id = azurerm_key_vault.keyVault002.id
 }
 
 resource "azurerm_key_vault_secret" "mysqlserver001PasswordSecretDeployment" {
-  name         = "${local.keyVault002Name}/${local.mySqlServer001Name}Password"
+  name         = "${local.keyVault002Name}-${local.mySqlServer001Name}Password"
   value        = var.sqlAdminPassword
-  key_vault_id = azurerm_key_vault.keyVaultMetadata["datalz-vault002"].id
+  key_vault_id = azurerm_key_vault.keyVault002.id
 }
 
 resource "azurerm_key_vault_secret" "mysqlserver001ConnectionStringSecretDeployment" {
-  name         = "${local.keyVault002Name}/${local.mySqlServer001Name}ConnectionString"
+  name         = "${local.keyVault002Name}-${local.mySqlServer001Name}ConnectionString"
   value        = "jdbc:mysql://${local.mySqlServer001Name}.mysql.database.azure.com:3306/${azurerm_mysql_database.mysqlServerHiveMetastoreDb.name}?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2"
-  key_vault_id = azurerm_key_vault.keyVaultMetadata["datalz-vault002"].id
+  key_vault_id = azurerm_key_vault.keyVault002.id
 }
+*/

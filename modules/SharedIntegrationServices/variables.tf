@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "name" {
   type        = string
   description = "prefix to be used for resource names"
   default     = "datalz"
@@ -22,6 +22,10 @@ variable "tags" {
   }
 }
 
+variable "random" {
+  type = string
+}
+
 variable "rgName" {
   type        = string
   description = "The name of the resource group"
@@ -40,6 +44,22 @@ variable "storageServicesResourceGroupName" {
 }
 
 variable "storageRawId" {
+  type = string
+}
+
+variable "storageEnrichedCuratedName" {
+  type = string
+}
+
+variable "storageRawName" {
+  type = string
+}
+
+variable "keyVault001Name" {
+  type = string
+}
+
+variable "sqlServer001Name" {
   type = string
 }
 
@@ -86,7 +106,19 @@ variable "databricksIntegration001PrivateSubnetName" {
   type = string
 }
 
+variable "databricksIntegrationPrivateNsgAssocId" {
+  type = string
+}
 variable "databricksIntegration001PublicSubnetName" {
   type = string
+}
+
+variable "databricksIntegrationPublicNsgAssocId" {
+  type = string
+}
+
+variable "create_shir" {
+  type        = bool
+  description = "True or False - Determines if template will deploy an Azure Data Factory Self-Hosted Integration Runtime that may be shared by multiple Data Factory instances"
 }
 

@@ -1,0 +1,3 @@
+azurecreds*
+provider.tf
+input_sensitive.tfvars

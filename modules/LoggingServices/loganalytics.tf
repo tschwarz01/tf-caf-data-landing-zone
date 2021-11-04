@@ -1,4 +1,3 @@
-
 resource "azurerm_log_analytics_workspace" "logAnalytics" {
   name                       = local.logAnalytics001Name
   location                   = var.location
@@ -9,7 +8,6 @@ resource "azurerm_log_analytics_workspace" "logAnalytics" {
   retention_in_days          = 120
   tags                       = var.tags
 }
-
 
 resource "azurerm_key_vault_secret" "logAnalytics001IdSecretDeployment" {
   name         = "${azurerm_log_analytics_workspace.logAnalytics.name}Id"

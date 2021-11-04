@@ -3,7 +3,7 @@ variable "environment" {
   description = "The release stage of the environment"
 }
 
-variable "prefix" {
+variable "name" {
   type        = string
   description = "prefix to be used for resource names"
 }
@@ -21,6 +21,10 @@ variable "tags" {
 variable "rgName" {
   type        = string
   description = "The name of the resource group"
+}
+
+variable "random" {
+  type = string
 }
 
 variable "vnetAddressPrefix" {

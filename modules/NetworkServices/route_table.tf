@@ -1,6 +1,6 @@
 
 resource "azurerm_route_table" "route_table" {
-  name                          = "${var.prefix}-routetable"
+  name                          = "${var.name}-routetable"
   location                      = var.location
   resource_group_name           = var.rgName
   disable_bgp_route_propagation = false

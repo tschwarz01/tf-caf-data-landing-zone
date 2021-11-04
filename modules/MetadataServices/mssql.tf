@@ -1,16 +1,5 @@
-locals {
-  keyVault001Name    = "${var.prefix}-vault001"
-  keyVault002Name    = "${var.prefix}-vault002"
-  sqlServer001Name   = "${var.prefix}-sqlserver001"
-  mySqlServer001Name = "${var.prefix}-mysqlserver001"
-
-  keyVaults = [local.keyVault001Name, local.keyVault002Name]
-}
-
-data "azurerm_client_config" "current" {}
-
 resource "azurerm_mssql_server" "sqlServerMetadata" {
-  name                          = "${var.prefix}-sql01"
+  name                          = local.sqlServer001Name
   resource_group_name           = var.rgName
   location                      = var.location
   version                       = "12.0"
@@ -42,20 +31,19 @@ resource "azurerm_mssql_database" "sqlDatabaseMetadata" {
   read_scale                  = false
   sku_name                    = "Basic"
   zone_redundant              = false
-  auto_pause_delay_in_minutes = -1
+  auto_pause_delay_in_minutes = 0
   tags                        = var.tags
-
 }
 
 resource "azurerm_private_endpoint" "sqlMetadataPrivateEndpoint" {
-  name                = "${var.prefix}-${azurerm_mssql_database.sqlDatabaseMetadata.name}-sql-private-endpoint"
+  name                = "${var.name}-${azurerm_mssql_server.sqlServerMetadata.name}-sql-private-endpoint"
   location            = var.location
   resource_group_name = var.rgName
   subnet_id           = var.svcSubnetId
 
   private_service_connection {
-    name                           = "${var.prefix}-${azurerm_mssql_database.sqlDatabaseMetadata.name}-sql-private-endpoint-connection"
-    private_connection_resource_id = azurerm_mssql_database.sqlDatabaseMetadata.id
+    name                           = "${var.name}-${azurerm_mssql_server.sqlServerMetadata.name}-sql-private-endpoint-connection"
+    private_connection_resource_id = azurerm_mssql_server.sqlServerMetadata.id
     subresource_names              = ["sqlServer"]
     is_manual_connection           = false
   }

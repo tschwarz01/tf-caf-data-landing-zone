@@ -1,11 +1,10 @@
-data "azurerm_client_config" "current" {}
-
-locals {
-  keyVault001Name             = "${var.prefix}-vault003"
-  logAnalytics001Name         = "${var.prefix}-la001"
-  keyVaultPrivateEndpointName = "${azurerm_key_vault.keyVault.name}-private-endpoint"
+resource "random_string" "random" {
+  length  = 5
+  number  = true
+  special = false
+  lower   = true
+  upper   = false
 }
-
 
 
 /*

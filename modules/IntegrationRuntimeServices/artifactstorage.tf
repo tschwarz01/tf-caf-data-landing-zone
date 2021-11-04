@@ -1,5 +1,3 @@
-
-
 resource "azurerm_storage_account" "artifactsStorage" {
   name                      = local.artifactstorage001Name
   resource_group_name       = var.rgName

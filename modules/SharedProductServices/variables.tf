@@ -8,7 +8,7 @@ variable "privateDnsZoneIdSynapseDev" {
   description = "Specifies the resource ID of the private DNS zone for Azure Synapse Dev Namespaces."
 }
 
-variable "prefix" {
+variable "name" {
   type        = string
   description = "prefix to be used for resource names"
   default     = "datalz"
@@ -30,6 +30,10 @@ variable "tags" {
     #Environment = locals.environment
     Toolkit = "Terraform"
   }
+}
+
+variable "random" {
+  type = string
 }
 
 variable "rgName" {
@@ -93,4 +97,17 @@ variable "sqlAdminPassword" {
 
 variable "synapseProduct001ComputeSubnetId" {
   type = string
+}
+
+variable "databricksIntegrationPrivateNsgAssocId" {
+  type = string
+}
+
+variable "databricksIntegrationPublicNsgAssocId" {
+  type = string
+}
+
+variable "tenant_id" {
+  type = string
+
 }

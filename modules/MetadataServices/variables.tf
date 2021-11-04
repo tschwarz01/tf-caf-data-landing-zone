@@ -1,5 +1,4 @@
-
-variable "prefix" {
+variable "name" {
   type        = string
   description = "prefix to be used for resource names"
 }
@@ -17,6 +16,10 @@ variable "tags" {
 variable "rgName" {
   type        = string
   description = "The name of the resource group"
+}
+
+variable "random" {
+  type = string
 }
 
 variable "svcSubnetId" {
@@ -76,4 +79,8 @@ variable "privateDnsZoneIdSqlServer" {
 variable "privateDnsZoneIdMySqlServer" {
   type        = string
   description = "Specifies the resource ID of the private DNS zone for Azure Database for MySQL."
+}
+
+variable "tenant_id" {
+  type = string
 }

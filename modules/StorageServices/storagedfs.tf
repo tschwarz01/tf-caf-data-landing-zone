@@ -34,6 +34,7 @@ resource "azurerm_storage_account" "stgAccts" {
   network_rules {
     default_action = "Deny"
     bypass         = toset(["AzureServices", "Metrics"])
+    ip_rules       = ["76.217.35.207"]
   }
 }
 

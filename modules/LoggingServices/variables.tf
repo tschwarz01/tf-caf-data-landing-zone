@@ -1,10 +1,9 @@
-
 variable "environment" {
   type        = string
   description = "The release stage of the environment"
 }
 
-variable "prefix" {
+variable "name" {
   type        = string
   description = "prefix to be used for resource names"
 }
@@ -19,6 +18,10 @@ variable "tags" {
   description = "Tags that should be applied to all deployed resources"
 }
 
+variable "random" {
+  type = string
+}
+
 variable "rgName" {
   type        = string
   description = "The name of the resource group"
@@ -31,4 +34,8 @@ variable "svcSubnetId" {
 variable "privateDnsZoneIdKeyVault" {
   type        = string
   description = "Specifies the resource ID of the private DNS zone for Key Vault."
+}
+
+variable "tenant_id" {
+  type = string
 }

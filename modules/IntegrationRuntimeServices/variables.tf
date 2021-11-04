@@ -28,6 +28,10 @@ variable "tags" {
   }
 }
 
+variable "random" {
+  type = string
+}
+
 variable "rgName" {
   type        = string
   description = "The name of the resource group"
@@ -42,8 +46,6 @@ variable "privateDnsZoneIdDataFactoryPortal" {
   type        = string
   description = "Specifies the resource ID of the private DNS zone for the Data Factory Portal."
 }
-
-
 
 variable "vmAdminUserName" {
   type        = string
@@ -73,4 +75,9 @@ variable "portalDeployment" {
 
 variable "svcSubnetId" {
   type = string
+}
+
+variable "create_shir" {
+  type        = bool
+  description = "True or False - Determines if template will deploy an Azure Data Factory Self-Hosted Integration Runtime that may be shared by multiple Data Factory instances"
 }

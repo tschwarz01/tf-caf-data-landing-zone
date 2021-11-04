@@ -208,3 +208,8 @@ variable "privateDnsZoneIdSynapseDev" {
   type        = string
   description = "Specifies the resource ID of the private DNS zone for Azure Synapse Dev Namespaces."
 }
+
+variable "tenant_id" {
+  type = string
+
+}
