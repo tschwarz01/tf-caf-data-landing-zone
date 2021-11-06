@@ -10,7 +10,7 @@ resource "azurerm_log_analytics_workspace" "logAnalytics" {
 }
 
 resource "azurerm_key_vault_secret" "logAnalytics001IdSecretDeployment" {
-  name         = "${azurerm_log_analytics_workspace.logAnalytics.name}Id"
+  name         = "${azurerm_log_analytics_workspace.logAnalytics.name}1Id"
   value        = azurerm_log_analytics_workspace.logAnalytics.workspace_id
   content_type = "text/plain"
   key_vault_id = azurerm_key_vault.keyVault.id
@@ -20,7 +20,7 @@ resource "azurerm_key_vault_secret" "logAnalytics001IdSecretDeployment" {
 }
 
 resource "azurerm_key_vault_secret" "logAnalytics001KeySecretDeployment" {
-  name         = "${azurerm_log_analytics_workspace.logAnalytics.name}Key"
+  name         = "${azurerm_log_analytics_workspace.logAnalytics.name}1Key"
   value        = azurerm_log_analytics_workspace.logAnalytics.primary_shared_key
   content_type = "text/plain"
   key_vault_id = azurerm_key_vault.keyVault.id

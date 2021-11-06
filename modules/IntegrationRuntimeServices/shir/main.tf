@@ -78,7 +78,7 @@ resource "azurerm_lb_probe" "adf-lb-probe" {
 
 
 resource "azurerm_windows_virtual_machine_scale_set" "vmss01" {
-  name                 = "datalzvm${var.random}"
+  name                 = "datalzvm1${var.random}"
   computer_name_prefix = "shir"
   resource_group_name  = var.rgName
   location             = var.location

@@ -1,7 +1,7 @@
-tenant_id                                       = ""
-prefix                                          = "datalz"
-location                                        = "southcentralus"
-environment                                     = "dev"
+tenant_id                                       = ""  // Azure AD Tenant ID - This will be a GUID
+prefix                                          = "datalz" //prefix and environment will be combined and used as a prefix for resource names
+environment                                     = "dev" //prefix and environment will be combined and used as a prefix for resource names
+location                                        = "southcentralus" // Azure region
 vnetAddressPrefix                               = "10.1.0.0/16"
 servicesSubnetAddressPrefix                     = "10.1.0.0/24"
 databricksIntegrationPublicSubnetAddressPrefix  = "10.1.1.0/24"
@@ -25,7 +25,6 @@ sqlserverAdminGroupObjectID                     = "90e2f90b-dc0c-0000-0000-00000
 mysqlserverAdminGroupName                       = "<Azure AD Group Name>"
 mysqlserverAdminGroupObjectID                   = "90e2f90b-dc0c-0000-0000-00000000000"
 
-
 privateDnsZoneIdKeyVault          = "/subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
 privateDnsZoneIdDataFactory       = "/subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net"
 privateDnsZoneIdDataFactoryPortal = "/subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
@@ -37,6 +36,5 @@ privateDnsZoneIdEventhubNamespace = "/subscriptions/<SUBSCRIPTION ID>/resourceGr
 privateDnsZoneIdSynapseDev        = "/subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
 privateDnsZoneIdSynapseSql        = "/subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net"
 
-//optional
 deploySelfHostedIntegrationRuntimes = true
 datafactoryIds                      = [""]
